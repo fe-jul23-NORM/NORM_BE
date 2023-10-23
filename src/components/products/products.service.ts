@@ -2,7 +2,7 @@ import { Global, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../../entities/product.entity';
 import { Repository } from 'typeorm';
-import { IProductAllQuery, VALID_SORT_BY } from "../../types/query.types";
+import { IProductAllQuery, VALID_SORT_BY } from '../../types/query.types';
 
 @Global()
 @Injectable()
@@ -14,7 +14,6 @@ export class ProductsService {
 
   async getAllProducts(productQuery: IProductAllQuery) {
     const { query, page, perPage, sortBy } = productQuery;
-    // const skip = (page - 1) * limit;
 
     const queryBuilder = this.productRepository
       .createQueryBuilder('product')
