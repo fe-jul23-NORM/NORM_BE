@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { PRODUCT_ROUTES } from '../../constants/routes';
+import { Response } from 'express';
 import { IProductAllQuery } from '../../types/query.types';
 
 @Controller(PRODUCT_ROUTES.BASE)
@@ -13,8 +14,8 @@ export class ProductsController {
   }
 
   @Get(PRODUCT_ROUTES.GET_CURRENT)
-  getCurrent() {
-    return this.productsService.getCurrentProduct();
+  getCurrent(@Param('id') id: string) {
+    return this.productsService.getCurrentProduct(id);
   }
 
   @Get(PRODUCT_ROUTES.GET_NEW)
