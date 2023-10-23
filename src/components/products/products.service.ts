@@ -2,7 +2,6 @@ import { Global, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../../entities/product.entity';
 import { Repository } from 'typeorm';
-import { Response } from 'express';
 import { IProductAllQuery, VALID_SORT_BY } from '../../types/query.types';
 import * as path from 'path';
 import * as fs from 'fs';
