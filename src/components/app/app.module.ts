@@ -11,7 +11,7 @@ import { TypeOrmConfigService } from '../../config/config';
   imports: [
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../../..', 'client/public/img'),
+      rootPath: join(__dirname, '../../..', '/public/img'),
       exclude: ['/api/(.*)'],
       serveRoot: '/img',
     }),
