@@ -34,10 +34,8 @@ export class ProductsService {
 
     const [result, total] = await queryBuilder.getManyAndCount();
 
-    const test = result.map((item) => item.price);
-
     return {
-      test,
+      result,
       total,
     };
   }
