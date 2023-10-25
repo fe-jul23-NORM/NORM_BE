@@ -21,6 +21,7 @@ export class ProductsService {
   ) {}
 
   async getAllProducts(productQuery: IProductAllQuery) {
+    console.log(productQuery);
     const { query, page, perPage, sortBy, productType } = productQuery;
 
     try {
@@ -47,7 +48,8 @@ export class ProductsService {
         total,
       };
     } catch (e) {
-      return new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
+      console.log(e);
+      throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -58,7 +60,7 @@ export class ProductsService {
       .getOne();
 
     if (!result) {
-      return new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
+      throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
     }
 
     return result;
@@ -73,7 +75,7 @@ export class ProductsService {
       );
       return fs.readFileSync(filePath, 'utf8');
     } catch (e) {
-      return new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
+      throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -86,11 +88,13 @@ export class ProductsService {
   }
 
   async getDiscountProducts() {
-    return this.productRepository
+    const products = await this.productRepository
       .createQueryBuilder('product')
       .where('product.price != product.fullPrice')
-      .limit(10)
+      .limit(100)
       .getMany();
+
+    return getRandomProducts(products);
   }
 
   async getRecommendedProducts(id, query: IProductQuery) {
@@ -101,7 +105,7 @@ export class ProductsService {
       .orderBy('product.id', 'DESC')
       .where({
         id: Not(Number(id)),
-        category: productType,
+        category: productType || 'phones',
       })
       .limit(50)
       .getMany();

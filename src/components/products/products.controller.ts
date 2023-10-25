@@ -7,7 +7,7 @@ import { IProductAllQuery, IProductQuery } from '../../types/query.types';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Get(PRODUCT_ROUTES.BASE)
+  @Get('')
   getAll(@Query() query: IProductAllQuery) {
     return this.productsService.getAllProducts(query);
   }
