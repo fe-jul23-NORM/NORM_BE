@@ -1,5 +1,5 @@
 export const PRODUCT_ROUTES = {
-  BASE: '/products',
+  BASE: 'api/products',
   GET_CURRENT: '/:id',
   GET_NEW: '/new',
   GET_DISCOUNT: '/discount',

@@ -3,6 +3,11 @@ export interface IProductAllQuery {
   page?: string;
   sortBy?: SortProductByEnum;
   query?: string;
+  productType: string;
+}
+
+export interface IProductQuery {
+  productType: string;
 }
 
 export enum SortProductByEnum {
