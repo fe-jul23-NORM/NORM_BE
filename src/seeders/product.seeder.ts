@@ -3,7 +3,7 @@ import { Seeder } from 'nestjs-seeder';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entities/product.entity';
 import { Repository } from 'typeorm';
-import { PRODUCTS } from '../db/data/products';
+import { PRODUCTS } from '../../db/data/products';
 
 @Injectable()
 export class ProductSeeder implements Seeder {

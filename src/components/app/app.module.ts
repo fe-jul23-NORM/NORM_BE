@@ -7,19 +7,23 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { TypeOrmConfigService } from '../../config/config';
+import { AuthModule } from '../auth/auth.module';
+import { CoreModule } from '../core/core.module';
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../..', '/public/img'),
+      rootPath: join(__dirname, '../../../..', '/public/img'),
       exclude: ['/api/(.*)'],
       serveRoot: '/img',
     }),
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
     }),
     ProductsModule,
+    CoreModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

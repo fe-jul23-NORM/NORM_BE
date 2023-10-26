@@ -48,7 +48,6 @@ export class ProductsService {
         total,
       };
     } catch (e) {
-      console.log(e);
       throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
     }
   }
