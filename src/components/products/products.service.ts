@@ -21,15 +21,13 @@ export class ProductsService {
   ) {}
 
   async getAllProducts(productQuery: IProductAllQuery) {
-    console.log(productQuery);
     const { query, page, perPage, sortBy, productType } = productQuery;
+    let currentPage = Number(page);
 
     try {
       const queryBuilder = this.productRepository
         .createQueryBuilder('product')
-        .where('product.category = :category', { category: productType })
-        .skip((Number(page) - 1) * Number(perPage))
-        .take(Number(perPage));
+        .where('product.category = :category', { category: productType });
 
       if (sortBy && VALID_SORT_BY.includes(sortBy)) {
         queryBuilder.orderBy(`product.${sortBy}`, 'DESC');
@@ -41,11 +39,21 @@ export class ProductsService {
         });
       }
 
-      const [result, total] = await queryBuilder.getManyAndCount();
+      const totalCount = await queryBuilder.getCount();
+      const maxPage = Math.ceil(totalCount / Number(perPage));
+      if (maxPage < currentPage) {
+        currentPage = maxPage;
+      }
+
+      const [result, total] = await queryBuilder
+        .skip((currentPage - 1) * Number(perPage))
+        .take(Number(perPage))
+        .getManyAndCount();
 
       return {
         result,
         total,
+        page: currentPage,
       };
     } catch (e) {
       throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
