@@ -5,3 +5,11 @@ export const PRODUCT_ROUTES = {
   GET_DISCOUNT: '/discount',
   GET_RECOMMENDED: '/:id/recommended',
 };
+
+export const AUTH_ROUTES = {
+  DEFAULT: '/api/auth',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  LOGOUT: '/logout',
+  REFRESH: '/refresh',
+};

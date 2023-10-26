@@ -2,6 +2,8 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { Product } from '../entities/product.entity';
+import { Token } from '../entities/token.entity';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -15,7 +17,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>('DB_USERNAME'),
       password: this.configService.get<string>('DB_PASSWORD'),
       database: this.configService.get<string>('DB_NAME'),
-      entities: [Product],
+      entities: [Product, User, Token],
+      url: this.configService.get<string>('DB_URL'),
+      ssl: true,
       synchronize: false,
     };
   }
