@@ -1,5 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Order } from './order.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -38,7 +37,4 @@ export class Product {
 
   @Column({ type: 'varchar', length: 255 })
   image: string;
-
-  @ManyToMany(() => Order, (order) => order.products)
-  orders: Order[];
 }
