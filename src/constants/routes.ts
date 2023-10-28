@@ -4,6 +4,9 @@ export const PRODUCT_ROUTES = {
   GET_NEW: '/new',
   GET_DISCOUNT: '/discount',
   GET_RECOMMENDED: '/:id/recommended',
+  GET_FAVORITES: '/favorites',
+  ADD_TO_FAVORITE: '/add-to-favorite/:id',
+  REMOVE_FROM_FAVORITE: 'remove-from-favorite/:id',
 };
 
 export const AUTH_ROUTES = {

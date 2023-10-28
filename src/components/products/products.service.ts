@@ -1,7 +1,7 @@
 import { Global, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../../entities/product.entity';
-import { Not, Repository } from 'typeorm';
+import { Equal, Not, Repository } from 'typeorm';
 import {
   ProductAllQuery,
   ProductQuery,
@@ -11,16 +11,19 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { ErrorEnum } from '../../types/errors.types';
 import { getRandomProducts } from '../../helpers/products.helper';
+import { Favorite_Product } from '../../entities/favorite_product.entity';
 
 @Global()
 @Injectable()
 export class ProductsService {
   constructor(
+    @InjectRepository(Favorite_Product)
+    private readonly favoriteProductRepository: Repository<Favorite_Product>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  async getAllProducts(productQuery: ProductAllQuery) {
+  async getAll(productQuery: ProductAllQuery) {
     const { query, page, perPage, sortBy, productType } = productQuery;
     let currentPage = Number(page);
 
@@ -60,7 +63,7 @@ export class ProductsService {
     }
   }
 
-  async getProductById(id: string) {
+  async getById(id: string) {
     const result = await this.productRepository
       .createQueryBuilder('product')
       .where(`product.id = ${Number(id)}`)
@@ -73,9 +76,9 @@ export class ProductsService {
     return result;
   }
 
-  async getCurrentProduct(id: string) {
+  async getCurrent(id: string) {
     try {
-      const product = await this.getProductById(id);
+      const product = await this.getById(id);
       const filePath = path.join(
         __dirname,
         `../../../public/productsInfo/${(product as Product).itemId}.json`,
@@ -86,7 +89,7 @@ export class ProductsService {
     }
   }
 
-  getNewProducts() {
+  getNew() {
     return this.productRepository
       .createQueryBuilder('product')
       .orderBy(`product.year`, 'DESC')
@@ -94,7 +97,7 @@ export class ProductsService {
       .getMany();
   }
 
-  async getDiscountProducts() {
+  async getDiscount() {
     const products = await this.productRepository
       .createQueryBuilder('product')
       .where('product.price != product.fullPrice')
@@ -104,7 +107,7 @@ export class ProductsService {
     return getRandomProducts(products);
   }
 
-  async getRecommendedProducts(id, query: ProductQuery) {
+  async getRecommended(id, query: ProductQuery) {
     const { productType } = query;
 
     const lastProducts = await this.productRepository
@@ -118,5 +121,68 @@ export class ProductsService {
       .getMany();
 
     return getRandomProducts(lastProducts);
+  }
+
+  async addToFavorite(req, id) {
+    const product = await this.productRepository.findOneBy({ id });
+    const alreadyAdded = await this.favoriteProductRepository.findOneBy({
+      product: Equal(id),
+      user: Equal(req.user.id),
+    });
+
+    if (!product) {
+      throw new HttpException(
+        ErrorEnum.UndefinedProduct,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (alreadyAdded) {
+      throw new HttpException(
+        ErrorEnum.AlreadyInFavorites,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const newFavorite = await this.favoriteProductRepository.insert({
+      product: id,
+      user: req.user.id,
+    });
+
+    return this.favoriteProductRepository
+      .createQueryBuilder('favorite_product')
+      .where({ id: newFavorite.raw[0].id })
+      .leftJoinAndSelect('favorite_product.product', 'product')
+      .getOne();
+  }
+
+  async removeFromFavorite(req, id) {
+    const product = await this.favoriteProductRepository.findOneBy({
+      product: Equal(id),
+      user: Equal(req.user.id),
+    });
+
+    if (!product) {
+      throw new HttpException(
+        ErrorEnum.UndefinedProduct,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.favoriteProductRepository.delete({
+      id: product.id,
+    });
+
+    return product.id;
+  }
+
+  async getFavorites(req) {
+    const favoriteProducts = await this.favoriteProductRepository
+      .createQueryBuilder('favorite_product')
+      .where({ user: req.user.id })
+      .leftJoinAndSelect('favorite_product.product', 'product')
+      .getMany();
+
+    return favoriteProducts.map((item) => item.product);
   }
 }
