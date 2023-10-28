@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../../entities/product.entity';
 import { Not, Repository } from 'typeorm';
 import {
-  IProductAllQuery,
-  IProductQuery,
+  ProductAllQuery,
+  ProductQuery,
   VALID_SORT_BY,
 } from '../../types/query.types';
 import * as path from 'path';
@@ -20,16 +20,14 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  async getAllProducts(productQuery: IProductAllQuery) {
-    console.log(productQuery);
+  async getAllProducts(productQuery: ProductAllQuery) {
     const { query, page, perPage, sortBy, productType } = productQuery;
+    let currentPage = Number(page);
 
     try {
       const queryBuilder = this.productRepository
         .createQueryBuilder('product')
-        .where('product.category = :category', { category: productType })
-        .skip((Number(page) - 1) * Number(perPage))
-        .take(Number(perPage));
+        .where('product.category = :category', { category: productType });
 
       if (sortBy && VALID_SORT_BY.includes(sortBy)) {
         queryBuilder.orderBy(`product.${sortBy}`, 'DESC');
@@ -41,11 +39,21 @@ export class ProductsService {
         });
       }
 
-      const [result, total] = await queryBuilder.getManyAndCount();
+      const totalCount = await queryBuilder.getCount();
+      const maxPage = Math.ceil(totalCount / Number(perPage));
+      if (maxPage < currentPage) {
+        currentPage = maxPage;
+      }
+
+      const [result, total] = await queryBuilder
+        .skip((currentPage - 1) * Number(perPage))
+        .take(Number(perPage))
+        .getManyAndCount();
 
       return {
         result,
         total,
+        page: currentPage,
       };
     } catch (e) {
       throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
@@ -96,7 +104,7 @@ export class ProductsService {
     return getRandomProducts(products);
   }
 
-  async getRecommendedProducts(id, query: IProductQuery) {
+  async getRecommendedProducts(id, query: ProductQuery) {
     const { productType } = query;
 
     const lastProducts = await this.productRepository
