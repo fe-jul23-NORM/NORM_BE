@@ -5,4 +5,5 @@ export enum ErrorEnum {
   UndefinedToken = 'UNDEFINED_TOKEN',
   TokenExpired = 'TOKEN_EXPIRED',
   NotAuthorized = 'NOT_AUTHORIZED',
+  EmptyCard = 'EMPTY_CART',
 }

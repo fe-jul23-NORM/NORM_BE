@@ -1,20 +1,18 @@
-import { IsString, Length } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import { ErrorEnum } from '../types/errors.types';
 
 export class CreateUserDto {
   @Length(2, 25)
-  @IsString({ message: 'Must be a string' })
+  @IsString({ message: ErrorEnum.InvalidData })
   readonly firstName: string;
   @Length(2, 20)
-  @IsString({ message: 'Must be a string' })
+  @IsString({ message: ErrorEnum.InvalidData })
   readonly lastName: string;
-  @IsString({ message: 'Must be a string' })
+  @IsEmail()
+  @IsNotEmpty({ message: ErrorEnum.InvalidData })
   readonly email: string;
-  @Length(8, 25, {
-    message: 'Password must be at least 8 characters and less than 25 ',
-  })
+  @Length(8, 25)
   readonly password: string;
-  @Length(8, 25, {
-    message: 'Password must be at least 8 characters and less than 25 ',
-  })
+  @Length(8, 25)
   readonly confirmPassword: string;
 }

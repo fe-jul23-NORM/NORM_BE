@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Order } from './order.entity';
 
 @Entity()
 export class Product {
@@ -7,9 +8,6 @@ export class Product {
 
   @Column({ type: 'varchar', enum: ['phones', 'tablets', 'accessories'] })
   category: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  phoneId: string;
 
   @Column({ type: 'varchar', length: 255 })
   itemId: string;
@@ -40,4 +38,7 @@ export class Product {
 
   @Column({ type: 'varchar', length: 255 })
   image: string;
+
+  @ManyToMany(() => Order, (order) => order.products)
+  orders: Order[];
 }

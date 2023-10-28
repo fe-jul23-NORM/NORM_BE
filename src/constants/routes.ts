@@ -13,3 +13,10 @@ export const AUTH_ROUTES = {
   LOGOUT: '/logout',
   REFRESH: '/refresh',
 };
+
+export const ORDER_ROUTES = {
+  DEFAULT: '/api/order',
+  CREATE_BY_USER: '/user-create',
+  CREATE_BY_GUEST: '/guest-create',
+  GET: '/get',
+};

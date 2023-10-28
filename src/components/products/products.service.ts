@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../../entities/product.entity';
 import { Not, Repository } from 'typeorm';
 import {
-  IProductAllQuery,
-  IProductQuery,
+  ProductAllQuery,
+  ProductQuery,
   VALID_SORT_BY,
 } from '../../types/query.types';
 import * as path from 'path';
@@ -20,7 +20,7 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  async getAllProducts(productQuery: IProductAllQuery) {
+  async getAllProducts(productQuery: ProductAllQuery) {
     const { query, page, perPage, sortBy, productType } = productQuery;
     let currentPage = Number(page);
 
@@ -104,7 +104,7 @@ export class ProductsService {
     return getRandomProducts(products);
   }
 
-  async getRecommendedProducts(id, query: IProductQuery) {
+  async getRecommendedProducts(id, query: ProductQuery) {
     const { productType } = query;
 
     const lastProducts = await this.productRepository

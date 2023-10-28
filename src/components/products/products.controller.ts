@@ -1,14 +1,14 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { PRODUCT_ROUTES } from '../../constants/routes';
-import { IProductAllQuery, IProductQuery } from '../../types/query.types';
+import { ProductAllQuery, ProductQuery } from '../../types/query.types';
 
 @Controller(PRODUCT_ROUTES.BASE)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get('')
-  getAll(@Query() query: IProductAllQuery) {
+  getAll(@Query() query: ProductAllQuery) {
     return this.productsService.getAllProducts(query);
   }
 
@@ -23,7 +23,7 @@ export class ProductsController {
   }
 
   @Get(PRODUCT_ROUTES.GET_RECOMMENDED)
-  getRecommended(@Query() query: IProductQuery, @Param('id') id: string) {
+  getRecommended(@Query() query: ProductQuery, @Param('id') id: string) {
     return this.productsService.getRecommendedProducts(id, query);
   }
 

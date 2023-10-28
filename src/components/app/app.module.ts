@@ -9,6 +9,7 @@ import { join } from 'path';
 import { TypeOrmConfigService } from '../../config/config';
 import { AuthModule } from '../auth/auth.module';
 import { CoreModule } from '../core/core.module';
+import { OrderModule } from '../order/order.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -21,9 +22,10 @@ import { CoreModule } from '../core/core.module';
       imports: [ConfigModule],
       useClass: TypeOrmConfigService,
     }),
-    ProductsModule,
     CoreModule,
+    ProductsModule,
     AuthModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
