@@ -81,9 +81,12 @@ export class ProductsService {
       const product = await this.getById(id);
       const filePath = path.join(
         __dirname,
-        `../../../public/productsInfo/${(product as Product).itemId}.json`,
+        `../../../../public/productsInfo/${(product as Product).category}.json`,
       );
-      return fs.readFileSync(filePath, 'utf8');
+      const data = fs.readFileSync(filePath, 'utf8');
+      const jsonArray = JSON.parse(data);
+
+      return jsonArray.find((item) => item.id === product.itemId);
     } catch (e) {
       throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
     }
