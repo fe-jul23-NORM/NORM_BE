@@ -1,4 +1,4 @@
-export interface IProductAllQuery {
+export interface ProductAllQuery {
   perPage?: string;
   page?: string;
   sortBy?: SortProductByEnum;
@@ -6,7 +6,7 @@ export interface IProductAllQuery {
   productType: string;
 }
 
-export interface IProductQuery {
+export interface ProductQuery {
   productType: string;
 }
 
