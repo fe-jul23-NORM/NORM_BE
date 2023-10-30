@@ -9,9 +9,6 @@ export class Product {
   category: string;
 
   @Column({ type: 'varchar', length: 255 })
-  phoneId: string;
-
-  @Column({ type: 'varchar', length: 255 })
   itemId: string;
 
   @Column({ type: 'varchar', length: 255 })

@@ -1,8 +1,10 @@
-import { IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { ErrorEnum } from '../types/errors.types';
 
 export class LoginUserDto {
-  @IsString({ message: 'Must be a string' })
+  @IsEmail()
+  @IsNotEmpty()
   readonly email;
-  @IsString({ message: 'Must be a string' })
+  @IsString({ message: ErrorEnum.InvalidData })
   readonly password;
 }
