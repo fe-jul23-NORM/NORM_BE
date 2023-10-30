@@ -9,7 +9,7 @@ import { CreateUserDto } from '../../dto/create-user.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Get(AUTH_ROUTES.LOGIN)
+  @Post(AUTH_ROUTES.LOGIN)
   login(
     @Res({ passthrough: true }) response: Response,
     @Body() dto: LoginUserDto,

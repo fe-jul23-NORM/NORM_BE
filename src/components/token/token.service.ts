@@ -14,14 +14,21 @@ export class TokenService {
   ) {}
 
   getTokenByUserId(user_id): Promise<Token> {
-    return this.tokenRepository.findOneBy({ user: user_id });
+    return this.tokenRepository
+      .createQueryBuilder('token')
+      .where({
+        user: user_id,
+      })
+      .getOne();
   }
 
   getTokenByToken(token): Promise<Token> {
     return this.tokenRepository
       .createQueryBuilder('token')
       .leftJoinAndSelect('token.user', 'user')
-      .where('token = :token', { token })
+      .where({
+        token: token,
+      })
       .getOne();
   }
 
