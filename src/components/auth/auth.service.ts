@@ -102,7 +102,7 @@ export class AuthService {
       const newTokens = this.tokenService.generateTokens(user);
 
       if (user.id.toString() !== tokenCheck.user.id.toString()) {
-        return new HttpException(
+        throw new HttpException(
           ErrorEnum.UndefinedToken,
           HttpStatus.UNAUTHORIZED,
         );
