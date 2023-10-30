@@ -5,6 +5,7 @@ import { Equal, Not, Repository } from 'typeorm';
 import {
   ProductAllQuery,
   ProductQuery,
+  SortProductByEnum,
   VALID_SORT_BY,
 } from '../../types/query.types';
 import * as path from 'path';
@@ -33,7 +34,11 @@ export class ProductsService {
         .where('product.category = :category', { category: productType });
 
       if (sortBy && VALID_SORT_BY.includes(sortBy)) {
-        queryBuilder.orderBy(`product.${sortBy}`, 'DESC');
+        if (sortBy === SortProductByEnum.Age) {
+          queryBuilder.orderBy('product.year', 'DESC');
+        } else {
+          queryBuilder.orderBy(`product.${sortBy}`, 'DESC');
+        }
       }
 
       if (query) {
