@@ -5,7 +5,9 @@ export const PRODUCT_ROUTES = {
   GET_DISCOUNT: '/discount',
   GET_RECOMMENDED: '/:id/recommended',
   GET_FAVORITES: '/favorites',
+  GET_BY_NAME: '/get-by-name',
   ADD_TO_FAVORITE: '/add-to-favorite/:id',
+  GET_CATEGORY_COUNT: '/get-category-count',
   REMOVE_FROM_FAVORITE: 'remove-from-favorite/:id',
 };
 

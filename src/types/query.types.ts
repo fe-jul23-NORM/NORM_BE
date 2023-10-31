@@ -10,6 +10,10 @@ export interface ProductQuery {
   productType: string;
 }
 
+export interface ProductByNameQuery {
+  name: string;
+}
+
 export enum SortProductByEnum {
   Age = 'age',
   Name = 'name',

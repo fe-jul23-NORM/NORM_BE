@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { PRODUCT_ROUTES } from '../../constants/routes';
-import { ProductAllQuery, ProductQuery } from '../../types/query.types';
+import {
+  ProductAllQuery,
+  ProductByNameQuery,
+  ProductQuery,
+} from '../../types/query.types';
 import { JwtAuthGuard } from '../../guards/JwtAuth.guard';
 import { Request } from 'express';
 
@@ -36,6 +40,16 @@ export class ProductsController {
   @Get(PRODUCT_ROUTES.GET_RECOMMENDED)
   getRecommended(@Query() query: ProductQuery, @Param('id') id: string) {
     return this.productsService.getRecommended(id, query);
+  }
+
+  @Get(PRODUCT_ROUTES.GET_BY_NAME)
+  getByName(@Query() query: ProductByNameQuery) {
+    return this.productsService.getByQuery(query.name);
+  }
+
+  @Get(PRODUCT_ROUTES.GET_CATEGORY_COUNT)
+  getCategoryCount() {
+    return this.productsService.getCategoryCount();
   }
 
   @Post(PRODUCT_ROUTES.ADD_TO_FAVORITE)
