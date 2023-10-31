@@ -68,10 +68,47 @@ export class ProductsService {
     }
   }
 
+  async getByQuery(query: string) {
+    if (!query) {
+      throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
+    }
+
+    const result = await this.productRepository
+      .createQueryBuilder('product')
+      .where('LOWER(product.name) LIKE :name', {
+        name: `%${query.toLowerCase()}%`,
+      })
+      .getMany();
+
+    if (!result) {
+      throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
+    }
+
+    return result;
+  }
+
+  async getCategoryCount() {
+    const results = await this.productRepository
+      .createQueryBuilder()
+      .select('category, COUNT(*) as count')
+      .groupBy('category')
+      .getRawMany();
+
+    const categoryCounts = {};
+
+    results.forEach((result) => {
+      categoryCounts[result.category] = parseInt(result.count);
+    });
+
+    return categoryCounts;
+  }
+
   async getById(id: string) {
     const result = await this.productRepository
       .createQueryBuilder('product')
-      .where(`product.id = ${Number(id)}`)
+      .where({
+        itemId: id,
+      })
       .getOne();
 
     if (!result) {
@@ -86,7 +123,7 @@ export class ProductsService {
       const product = await this.getById(id);
       const filePath = path.join(
         __dirname,
-        `../../../../public/productsInfo/${(product as Product).category}.json`,
+        `../../../../public/productsInfo/products.json`,
       );
       const data = fs.readFileSync(filePath, 'utf8');
       const jsonArray = JSON.parse(data);
