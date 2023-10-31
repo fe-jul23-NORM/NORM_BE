@@ -22,7 +22,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: this.configService.get<string>('DB_NAME'),
       entities: [Product, User, Token],
       url: this.configService.get<string>('DB_URL'),
-      ssl: true,
+      // ssl: true,
       synchronize: false,
     };
   }
