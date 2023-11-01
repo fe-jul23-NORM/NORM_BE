@@ -127,8 +127,9 @@ export class ProductsService {
       );
       const data = fs.readFileSync(filePath, 'utf8');
       const jsonArray = JSON.parse(data);
+      const foundProduct = jsonArray.find((item) => item.id === product.itemId);
 
-      return jsonArray.find((item) => item.id === product.itemId);
+      return { ...foundProduct, productPassport: product };
     } catch (e) {
       throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
     }
