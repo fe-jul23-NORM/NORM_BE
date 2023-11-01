@@ -78,6 +78,7 @@ export class ProductsService {
       .where('LOWER(product.name) LIKE :name', {
         name: `%${query.toLowerCase()}%`,
       })
+      .limit(6)
       .getMany();
 
     if (!result) {
