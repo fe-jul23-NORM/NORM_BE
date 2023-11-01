@@ -64,6 +64,7 @@ export class OrderService {
       .where({ user: req.user.id })
       .leftJoinAndSelect('order.products', 'order_product')
       .leftJoinAndSelect('order_product.product', 'product')
+      .orderBy('order.createdAt', 'DESC')
       .getMany();
   }
 }
