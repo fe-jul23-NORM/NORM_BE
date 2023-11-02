@@ -132,7 +132,10 @@ export class ProductsService {
 
       return { ...foundProduct, productPassport: product };
     } catch (e) {
-      throw new HttpException(ErrorEnum.InvalidData, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        ErrorEnum.UndefinedProduct,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -161,7 +164,7 @@ export class ProductsService {
       .createQueryBuilder('product')
       .orderBy('product.id', 'DESC')
       .where({
-        id: Not(Number(id)),
+        itemId: Not(id),
         category: productType || 'phones',
       })
       .limit(50)
