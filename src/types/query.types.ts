@@ -20,6 +20,12 @@ export enum SortProductByEnum {
   Price = 'price',
 }
 
+export enum ProductTypeEnum {
+  Phones = 'phones',
+  Tablets = 'tablets',
+  Accessories = 'accessories',
+}
+
 export const VALID_SORT_BY = [
   SortProductByEnum.Age,
   SortProductByEnum.Name,
