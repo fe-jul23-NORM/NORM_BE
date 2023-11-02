@@ -36,6 +36,7 @@ export class ProductsService {
       if (sortBy && VALID_SORT_BY.includes(sortBy)) {
         if (sortBy === SortProductByEnum.Age) {
           queryBuilder.orderBy('product.year', 'DESC');
+          queryBuilder.addOrderBy('product.id', 'ASC');
         } else {
           queryBuilder.orderBy(`product.${sortBy}`, 'DESC');
         }
