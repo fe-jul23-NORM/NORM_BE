@@ -20,7 +20,7 @@ export default new DataSource({
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_NAME'),
   entities: [User, Token, Order, Order_Product, Product, Favorite_Product],
-  // url: configService.get<string>('DB_URL'),
-  // ssl: true,
+  url: configService.get<string>('DB_URL'),
+  ssl: true,
   migrations: [`${__dirname}/migrations/*{.ts,.js}`],
 });
