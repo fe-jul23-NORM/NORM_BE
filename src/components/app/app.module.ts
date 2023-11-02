@@ -17,6 +17,10 @@ import { OrderModule } from '../order/order.module';
       exclude: ['/api/(.*)'],
       serveRoot: '/img',
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../../..', '/client'),
+      exclude: ['/api/(.*)'],
+    }),
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
